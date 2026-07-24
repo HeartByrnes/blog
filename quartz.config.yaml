@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
 configuration:
-  pageTitle: Blog
+  pageTitle: Joshua Byrnes
   pageTitleSuffix: ""
   enableSPA: true
   enablePopovers: true
@@ -126,7 +126,7 @@ plugins:
   - source: "@quartz-community/favicon"
     enabled: true
   - source: "@quartz-community/og-image"
-    enabled: true
+    enabled: false
   - source: "@quartz-community/cname"
     enabled: true
   - source: "@quartz-community/canvas-page"
@@ -150,8 +150,8 @@ plugins:
   - source: "@quartz-community/search"
     enabled: true
     layout:
-      position: left
-      priority: 20
+      position: beforeBody
+      priority: 1
       group: toolbar
       groupOptions:
         grow: true
@@ -183,8 +183,8 @@ plugins:
   - source: "@quartz-community/darkmode"
     enabled: true
     layout:
-      position: left
-      priority: 30
+      position: beforeBody
+      priority: 2
       group: toolbar
   - source: "@quartz-community/reader-mode"
     enabled: false
@@ -265,7 +265,7 @@ plugins:
 layout:
   groups:
     toolbar:
-      priority: 35
+      priority: 0
       direction: row
       gap: 0.5rem
   byPageType:
