@@ -1,0 +1,97 @@
+@use "./variables.scss" as *;
+
+// 1. Remove the highlighter background from internal links
+a.internal {
+  background-color: transparent;
+  padding: 0;
+}
+
+// 2. Hover overlay (popover previews) is disabled via enablePopovers: false
+//    in quartz.config.yaml — nothing needed here.
+
+// 3. Match heading size to the main site's section headings
+article h2,
+.postlist h2 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: $normalWeight;
+  line-height: 1.15;
+}
+
+// 4. Remove the left sidebar entirely and reclaim its space.
+//    Empty grid tracks still reserve their declared width even with no
+//    visible content, so the column has to be redefined, not just hidden.
+.left.sidebar {
+  display: none;
+}
+
+#quartz-body {
+  grid-template-columns: auto #{$sidePanelWidth};
+  grid-template-areas:
+    "grid-header grid-sidebar-right"
+    "grid-center grid-sidebar-right"
+    "grid-footer grid-sidebar-right";
+
+  @media all and #{$tablet} {
+    grid-template-columns: auto;
+    grid-template-areas:
+      "grid-header"
+      "grid-center"
+      "grid-sidebar-right"
+      "grid-footer";
+  }
+}
+
+// Floating "jump to top" button, replacing the site-title link that used
+// to live in the left sidebar.
+.jump-to-top {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 999;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--lightgray);
+  background-color: var(--light);
+  color: var(--dark);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.5rem);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  &:hover {
+    border-color: var(--secondary);
+    color: var(--secondary);
+  }
+
+  svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+}
+
+// 5. Search: let it grow to meet the dark mode toggle, and make it roomier
+.search {
+  max-width: none;
+}
+
+.search > .search-button {
+  height: 2.75rem;
+  padding: 0 1.25rem;
+}
+
+.search > .search-button > p {
+  font-size: 1.05rem;
+}
