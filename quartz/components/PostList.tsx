@@ -24,7 +24,7 @@ export const PostList: QuartzComponent = ({ cfg, fileData, allFiles }: QuartzCom
       <ul class="postlist-ul section-ul">
         {posts.map((page) => {
           const title = page.frontmatter?.title ?? page.slug
-          const description = page.frontmatter?.description ?? ""
+          const description = page.description ?? page.frontmatter?.description ?? ""
           return (
             <li class="postlist-li section-li">
               <div class="section">
