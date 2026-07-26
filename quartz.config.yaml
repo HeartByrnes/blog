@@ -169,7 +169,7 @@ plugins:
     enabled: true
     layout:
       position: beforeBody
-      priority: 20
+      priority: 5
       condition: not-index
   - source: "@quartz-community/tag-list"
     enabled: false
