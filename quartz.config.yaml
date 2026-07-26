@@ -148,7 +148,7 @@ plugins:
       position: right
       priority: 10
   - source: "@quartz-community/search"
-    enabled: true
+    enabled: false
     layout:
       position: beforeBody
       priority: 1
@@ -181,7 +181,7 @@ plugins:
       position: left
       priority: 10
   - source: "@quartz-community/darkmode"
-    enabled: true
+    enabled: false
     layout:
       position: beforeBody
       priority: 2
@@ -193,7 +193,7 @@ plugins:
       priority: 35
       group: toolbar
   - source: "@quartz-community/breadcrumbs"
-    enabled: true
+    enabled: false
     layout:
       position: beforeBody
       priority: 5
