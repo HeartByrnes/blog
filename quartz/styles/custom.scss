@@ -1,20 +1,14 @@
 @use "./variables.scss" as *;
 
-// 1. Remove the highlighter background from internal links — !important because a
-//    later, more specific base rule (a.internal:has(>img) etc.) was still winning.
 a.internal {
   background-color: transparent !important;
   padding: 0 !important;
 }
 
-// 2. Dim links slightly on hover, in addition to the existing color change
 a:hover {
   opacity: 0.75;
 }
 
-// 3. Breadcrumbs hidden via enabled: false in quartz.config.yaml — nothing needed here.
-
-// 4. Match heading sizes to the main site
 article > h1,
 h1.article-title {
   font-size: clamp(3rem, 7vw, 5.5rem);
@@ -32,7 +26,6 @@ article h2,
   margin-bottom: 1rem;
 }
 
-// Back-to-home arrow button (left of the search box in the toolbar)
 .home-button {
   display: flex;
   align-items: center;
@@ -52,21 +45,10 @@ article h2,
   }
 }
 
-// 4. Left sidebar has no content, but the column stays in the grid so its width
-//    is reserved as empty space — giving equal buffer on both sides of the content,
-//    matching the (still-present) right sidebar column. The center column is forced
-//    to 1fr since plain "auto" wasn't reliably claiming the leftover space once the
-//    left sidebar had nothing in it.
-.left.sidebar {
-  display: none;
-}
-
 #quartz-body {
   grid-template-columns: #{$sidePanelWidth} 1fr #{$sidePanelWidth};
 }
 
-// Floating "jump to top" button, replacing the site-title link that used
-// to live in the left sidebar.
 .jump-to-top {
   position: fixed;
   right: 1.5rem;
@@ -106,7 +88,6 @@ article h2,
   }
 }
 
-// 5. Search: let it grow to meet the dark mode toggle, and make it roomier
 .search {
   max-width: none;
 }
