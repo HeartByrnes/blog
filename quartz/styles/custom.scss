@@ -27,7 +27,19 @@ article h2,
 }
 
 .postlist .section-li > .section {
-  align-items: center;
+  align-items: center; // fallback for browsers without subgrid support
+  grid-template-rows: auto auto;
+}
+
+.postlist .section-li > .section > .meta {
+  grid-row: 1;
+  align-self: center;
+}
+
+.postlist .desc {
+  display: grid;
+  grid-row: 1 / span 2;
+  grid-template-rows: subgrid;
 }
 
 .home-button {
