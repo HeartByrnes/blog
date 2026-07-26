@@ -54,9 +54,15 @@ article h2,
 
 // 4. Left sidebar has no content, but the column stays in the grid so its width
 //    is reserved as empty space — giving equal buffer on both sides of the content,
-//    matching the (still-present) right sidebar column.
+//    matching the (still-present) right sidebar column. The center column is forced
+//    to 1fr since plain "auto" wasn't reliably claiming the leftover space once the
+//    left sidebar had nothing in it.
 .left.sidebar {
   display: none;
+}
+
+#quartz-body {
+  grid-template-columns: #{$sidePanelWidth} 1fr #{$sidePanelWidth};
 }
 
 // Floating "jump to top" button, replacing the site-title link that used
