@@ -7,9 +7,12 @@ a.internal {
 
 // Tags are also a.internal, so the rule above already strips their pill background —
 // but their own hover state was separately switching text color to var(--light)
-// (the page background color), making them invisible. Keep hover to color+opacity only.
-.tag-link:hover {
+// (the page background color), making them invisible. Force both properties
+// explicitly here rather than relying on the a.internal rule to cover hover too.
+a.tag-link:hover {
+  background-color: transparent !important;
   color: var(--secondary) !important;
+  opacity: 0.75;
 }
 
 a:hover {
@@ -57,9 +60,11 @@ article h2,
   width: 2rem;
   height: 2.75rem;
   color: var(--dark);
+  transition: opacity 0.2s ease;
 
   &:hover {
     color: var(--secondary);
+    opacity: 0.75;
   }
 
   svg {
@@ -68,8 +73,17 @@ article h2,
   }
 }
 
-.darkmode:hover svg {
-  fill: var(--secondary);
+button.darkmode {
+  transition: opacity 0.2s ease;
+}
+
+button.darkmode:hover {
+  opacity: 0.75;
+}
+
+button.darkmode:hover svg {
+  fill: var(--secondary) !important;
+  transition: fill 0.2s ease;
 }
 
 #quartz-body {
