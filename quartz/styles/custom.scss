@@ -52,13 +52,17 @@ article h2,
   grid-template-rows: subgrid;
 }
 
+// Unified toolbar sizing: these three were previously very differently sized/padded
+// (darkmode's base button is a tight 20x32px box with its icon touching the edges,
+// versus search's generous 1.25rem padding) — bringing them to matching dimensions
+// fixes both the uneven gaps and the uneven icon weight.
 .home-button {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 2rem;
-  height: 2.75rem;
+  width: 3rem;
+  height: 3rem;
   color: var(--dark);
   transition: opacity 0.2s ease;
 
@@ -74,7 +78,16 @@ article h2,
 }
 
 button.darkmode {
+  width: 3rem !important;
+  height: 3rem !important;
   transition: opacity 0.2s ease;
+}
+
+button.darkmode svg {
+  width: 1.3rem !important;
+  height: 1.3rem !important;
+  top: calc(50% - 0.65rem) !important;
+  left: calc(50% - 0.65rem) !important;
 }
 
 button.darkmode:hover {
@@ -134,10 +147,15 @@ button.darkmode:hover svg {
 }
 
 .search > .search-button {
-  height: 2.75rem;
-  padding: 0 1.25rem;
+  height: 3rem;
+  padding: 0 1.5rem;
 }
 
 .search > .search-button > p {
   font-size: 1.05rem;
+}
+
+.search > .search-button svg {
+  width: 1.3rem !important;
+  min-width: 1.3rem !important;
 }

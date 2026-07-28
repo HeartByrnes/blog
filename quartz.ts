@@ -24,7 +24,7 @@ const Toolbar = Flex({
     { Component: Search(), grow: true },
     { Component: Darkmode(), grow: false },
   ],
-  gap: "0.5rem",
+  gap: "0.75rem",
 })
 
 // Every entry in byPageType already has its own (often empty) beforeBody/afterBody
