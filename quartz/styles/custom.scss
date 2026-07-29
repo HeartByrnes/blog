@@ -142,7 +142,13 @@ button.darkmode:hover svg {
   }
 }
 
+.simple-search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
 .simple-search-input {
+  box-sizing: border-box;
   height: 3rem;
   padding: 0 1.5rem;
   font-size: 1.05rem;
@@ -161,4 +167,50 @@ button.darkmode:hover svg {
     outline: none;
     border-color: var(--secondary);
   }
+}
+
+.simple-search-results {
+  display: none;
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  z-index: 10;
+  margin: 0;
+  padding: 0.5rem;
+  list-style: none;
+  background-color: var(--light);
+  border: 1px solid var(--lightgray);
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.simple-search-wrapper.has-results .simple-search-results {
+  display: block;
+}
+
+.simple-search-result {
+  padding: 0.6rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--lightgray);
+  }
+}
+
+.simple-search-result-title {
+  font-weight: $semiBoldWeight;
+  color: var(--dark);
+}
+
+.simple-search-result-excerpt {
+  font-size: 0.85rem;
+  color: var(--gray);
+  margin-top: 0.15rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

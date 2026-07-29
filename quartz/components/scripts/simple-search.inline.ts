@@ -1,52 +1,130 @@
+type ScoredResult = {
+  slug: string
+  title: string
+  excerpt: string
+  score: number
+}
+
+function scoreEntries(index: Record<string, any>, query: string): ScoredResult[] {
+  const q = query.toLowerCase()
+  const words = q.split(/\s+/).filter(Boolean)
+  const results: ScoredResult[] = []
+
+  for (const slug of Object.keys(index)) {
+    const entry = index[slug]
+    const title = (entry.title ?? "").toString()
+    const content = (entry.content ?? "").toString()
+    const titleLower = title.toLowerCase()
+    const contentLower = content.toLowerCase()
+
+    let score = 0
+    if (titleLower.includes(q)) score += 10
+    if (contentLower.includes(q)) score += 3
+    for (const word of words) {
+      if (titleLower.includes(word)) score += 2
+      if (contentLower.includes(word)) score += 1
+    }
+
+    if (score > 0) {
+      const matchIdx = contentLower.indexOf(words[0] ?? q)
+      const start = Math.max(0, matchIdx - 30)
+      const excerpt = content.slice(start, start + 100).trim()
+      results.push({ slug, title, excerpt, score })
+    }
+  }
+
+  return results.sort((a, b) => b.score - a.score).slice(0, 6)
+}
+
 function setupSimpleSearch() {
-  const input = document.querySelector(".simple-search-input") as HTMLInputElement | null
-  if (!input) return
+  const wrapper = document.querySelector(".simple-search-wrapper") as HTMLElement | null
+  const input = wrapper?.querySelector(".simple-search-input") as HTMLInputElement | null
+  const resultsList = wrapper?.querySelector(".simple-search-results") as HTMLElement | null
+  if (!wrapper || !input || !resultsList) return
 
-  async function runSearch() {
-    const query = input!.value.trim().toLowerCase()
-    if (!query) return
+  let index: Record<string, any> | null = null
+  let currentResults: ScoredResult[] = []
 
-    // fetchData is a global promise set up by Quartz core on every page,
-    // resolving static/contentIndex.json — the same data the full search
-    // component uses. Reusing it avoids re-fetching or reimplementing indexing.
-    const index = await (window as any).fetchData
-    const words = query.split(/\s+/).filter(Boolean)
+  async function ensureIndex() {
+    if (!index) {
+      // fetchData is a global promise set up by Quartz core on every page,
+      // resolving static/contentIndex.json — reused here rather than
+      // re-fetching or reimplementing indexing.
+      index = await (window as any).fetchData
+    }
+    return index!
+  }
 
-    let bestSlug: string | null = null
-    let bestScore = 0
+  function renderResults(results: ScoredResult[]) {
+    currentResults = results
+    resultsList!.innerHTML = ""
 
-    for (const slug of Object.keys(index)) {
-      const entry = index[slug]
-      const title = (entry.title ?? "").toLowerCase()
-      const content = (entry.content ?? "").toLowerCase()
-
-      let score = 0
-      if (title.includes(query)) score += 10
-      if (content.includes(query)) score += 3
-      for (const word of words) {
-        if (title.includes(word)) score += 2
-        if (content.includes(word)) score += 1
-      }
-
-      if (score > bestScore) {
-        bestScore = score
-        bestSlug = slug
-      }
+    if (results.length === 0) {
+      wrapper!.classList.remove("has-results")
+      return
     }
 
-    if (bestSlug) {
-      window.location.href = "/" + bestSlug
+    for (const r of results) {
+      const li = document.createElement("li")
+      li.className = "simple-search-result"
+      const titleEl = document.createElement("div")
+      titleEl.className = "simple-search-result-title"
+      titleEl.textContent = r.title
+      const excerptEl = document.createElement("div")
+      excerptEl.className = "simple-search-result-excerpt"
+      excerptEl.textContent = r.excerpt
+      li.appendChild(titleEl)
+      li.appendChild(excerptEl)
+      li.addEventListener("mousedown", (e) => {
+        // mousedown (not click) so this fires before the input's blur hides the list
+        e.preventDefault()
+        window.location.href = "/" + r.slug
+      })
+      resultsList!.appendChild(li)
     }
+
+    wrapper!.classList.add("has-results")
+  }
+
+  async function onInput() {
+    const query = input!.value.trim()
+    if (!query) {
+      renderResults([])
+      return
+    }
+    const idx = await ensureIndex()
+    renderResults(scoreEntries(idx, query))
   }
 
   function onKeydown(e: KeyboardEvent) {
-    if (e.key === "Enter") {
-      runSearch()
+    if (e.key === "Enter" && currentResults.length > 0) {
+      window.location.href = "/" + currentResults[0].slug
+    } else if (e.key === "Escape") {
+      renderResults([])
+      input!.blur()
     }
   }
 
+  function onBlur() {
+    // small delay so mousedown on a result can still register
+    setTimeout(() => wrapper!.classList.remove("has-results"), 100)
+  }
+
+  function onFocus() {
+    if (currentResults.length > 0) wrapper!.classList.add("has-results")
+  }
+
+  input.addEventListener("input", onInput)
   input.addEventListener("keydown", onKeydown)
-  window.addCleanup?.(() => input.removeEventListener("keydown", onKeydown))
+  input.addEventListener("blur", onBlur)
+  input.addEventListener("focus", onFocus)
+
+  window.addCleanup?.(() => {
+    input!.removeEventListener("input", onInput)
+    input!.removeEventListener("keydown", onKeydown)
+    input!.removeEventListener("blur", onBlur)
+    input!.removeEventListener("focus", onFocus)
+  })
 }
 
 document.addEventListener("nav", setupSimpleSearch)

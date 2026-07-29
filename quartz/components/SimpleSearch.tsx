@@ -3,13 +3,16 @@ import script from "./scripts/simple-search.inline"
 
 export const SimpleSearch: QuartzComponent = () => {
   return (
-    <input
-      type="text"
-      class="simple-search-input"
-      placeholder="Search"
-      aria-label="Search"
-      autocomplete="off"
-    />
+    <div class="simple-search-wrapper">
+      <input
+        type="text"
+        class="simple-search-input"
+        placeholder="Search"
+        aria-label="Search"
+        autocomplete="off"
+      />
+      <ul class="simple-search-results"></ul>
+    </div>
   )
 }
 
