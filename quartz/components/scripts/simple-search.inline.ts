@@ -1,3 +1,10 @@
+// fetchData is a classic (non-module) global set up by Quartz core in its own
+// <script> tag on every page — a top-level `const`, which creates a shared lexical
+// binding across classic scripts on the page but does NOT attach to `window`.
+// Referencing it as window.fetchData (as an earlier version of this file did)
+// silently resolved to undefined and failed with no visible error.
+declare const fetchData: Promise<Record<string, any>>
+
 type ScoredResult = {
   slug: string
   title: string
@@ -47,10 +54,7 @@ function setupSimpleSearch() {
 
   async function ensureIndex() {
     if (!index) {
-      // fetchData is a global promise set up by Quartz core on every page,
-      // resolving static/contentIndex.json — reused here rather than
-      // re-fetching or reimplementing indexing.
-      index = await (window as any).fetchData
+      index = await fetchData
     }
     return index!
   }
