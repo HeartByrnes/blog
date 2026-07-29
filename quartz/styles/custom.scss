@@ -142,20 +142,23 @@ button.darkmode:hover svg {
   }
 }
 
-.search {
-  max-width: none;
-}
-
-.search > .search-button {
+.simple-search-input {
   height: 3rem;
   padding: 0 1.5rem;
-}
-
-.search > .search-button > p {
   font-size: 1.05rem;
-}
+  font-family: inherit;
+  color: var(--dark);
+  background-color: transparent;
+  border: 1px solid var(--lightgray);
+  border-radius: 4px;
+  width: 100%;
 
-.search > .search-button svg {
-  width: 1.3rem !important;
-  min-width: 1.3rem !important;
+  &::placeholder {
+    color: var(--gray);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--secondary);
+  }
 }

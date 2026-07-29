@@ -1,11 +1,11 @@
 import { loadQuartzConfig, loadQuartzLayout } from "./quartz/plugins/loader/config-loader"
 import * as builtinPlugins from "./quartz/plugins/index"
 import Flex from "./quartz/components/Flex"
-import { Search } from "@quartz-community/search"
 import { Darkmode } from "@quartz-community/darkmode"
 import { PostList } from "./quartz/components/PostList"
 import { JumpToTop } from "./quartz/components/JumpToTop"
 import { HomeButton } from "./quartz/components/HomeButton"
+import { SimpleSearch } from "./quartz/components/SimpleSearch"
 
 // loadQuartzConfig() builds its own PageTypeDispatcher internally from an unmodified
 // layout, so a separately-mutated `layout` export is never actually consulted by the
@@ -21,7 +21,7 @@ const layout = await loadQuartzLayout()
 const Toolbar = Flex({
   components: [
     { Component: HomeButton, grow: false },
-    { Component: Search(), grow: true },
+    { Component: SimpleSearch, grow: true },
     { Component: Darkmode(), grow: false },
   ],
   gap: "0.75rem",
