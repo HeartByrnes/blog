@@ -12,12 +12,33 @@ type ScoredResult = {
   score: number
 }
 
+// Only actual posts and individual tag pages should be searchable — not the
+// homepage, the auto-generated posts/ or tags/ folder listings, or anything else.
+function isSearchable(slug: string): boolean {
+  if (slug.startsWith("posts/") && slug !== "posts/index") return true
+  if (slug.startsWith("tags/") && slug !== "tags/index") return true
+  return false
+}
+
+// Only posts and tag pages should be searchable — not the homepage, the auto-generated
+// posts/index or tags/index folder listings, or anything else.
+function isSearchable(slug: string): boolean {
+  const parts = slug.split("/")
+  if (parts.length < 2) return false
+  const [section] = parts
+  const last = parts[parts.length - 1]
+  if (section !== "posts" && section !== "tags") return false
+  if (last === "index") return false
+  return true
+}
+
 function scoreEntries(index: Record<string, any>, query: string): ScoredResult[] {
   const q = query.toLowerCase()
   const words = q.split(/\s+/).filter(Boolean)
   const results: ScoredResult[] = []
 
   for (const slug of Object.keys(index)) {
+    if (!isSearchable(slug)) continue
     const entry = index[slug]
     const title = (entry.title ?? "").toString()
     const content = (entry.content ?? "").toString()
